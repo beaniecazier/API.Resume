@@ -32,4 +32,5 @@ build-and-push:
         echo "Not on default branch, tagging image a prerelease
         docker tag $IMAGE_NAME:temp $IMAGE_NAME:alpha-$CI_COMMIT_SHORT_SHA
         docker push $IMAGE_NAME:alpha-$CI_COMMIT_SHORT_SHA
+      fi
   environment: production
