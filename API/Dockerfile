@@ -1,10 +1,13 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+ARG PULL_ACCESS_USER
 ARG PULL_ACCESS_TOKEN
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+#RUN rm nuget.config
+COPY ["nuget.config.template", "nuget.config"]
+RUN sed -i -e "s/USER/$PULL_ACCESS_USER/g" -e "s/PW/$PULL_ACCESS_TOKEN/g" nuget.config
 COPY ["API/Resume.API.csproj", "API/"]
-RUN dotnet nuget add source "https://gitlab.com/api/v4/groups/100168093/-/packages/nuget/index.json" -n Gitlab-BeaniesUtils -u beanieroxiicazier -p PULL_ACCESS_TOKEN --store-password-in-clear-text
-RUN dotnet nuget add source "https://gitlab.com/api/v4/groups/99246157/-/packages/nuget/index.json" -n Gitlab-Resume -u beanieroxiicazier -p PULL_ACCESS_TOKEN --store-password-in-clear-text
 RUN dotnet restore "API/Resume.API.csproj"
 COPY . .
 WORKDIR "./API"

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="Gitlab-BeaniesUtils" value="https://gitlab.com/api/v4/groups/100168093/-/packages/nuget/index.json" />
+    <add key="Gitlab-Resume" value="https://gitlab.com/api/v4/groups/99246157/-/packages/nuget/index.json" />
+  </packageSources>
+  <packageSourceCredentials>
+    <Gitlab-BeaniesUtils>
+        <add key="Username" value="USER" />
+        <add key="ClearTextPassword" value="PW" />
+    </Gitlab-BeaniesUtils>
+    <Gitlab-Resume>
+        <add key="Username" value="USER" />
+        <add key="ClearTextPassword" value="PW" />
+    </Gitlab-Resume>
+</packageSourceCredentials>
+</configuration>
