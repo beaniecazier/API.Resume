@@ -1,0 +1,114 @@
+using BeaniesUtilities.Models.Resume;
+using FluentAssertions;
+using Gay.TCazier.Resume.API;
+using Gay.TCazier.Resume.API.Endpoints.V1.Create;
+using Gay.TCazier.Resume.API.Endpoints.V1.Delete;
+using Gay.TCazier.Resume.API.Endpoints.V1.Get;
+using Gay.TCazier.Resume.API.Endpoints.V1.Put;
+using Gay.TCazier.Resume.API.Mappings.V1;
+using Gay.TCazier.Resume.Contracts.Requests.V1.Update;
+using Gay.TCazier.Resume.Contracts.Responses.V1;
+using Gay.TCazier.Resume.Contracts.Endpoints.V1;
+using Resume.API.Tests.Integration.Mappings.V1;
+using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net;
+using System.Net.Http.Json;
+
+namespace Resume.API.Tests.Integration.Endpoint.V1.Put;
+
+public class TechTagModelPutEndpointsTests : IClassFixture<IntegrationTestWebApplicationFactory>, IAsyncLifetime
+{
+    private readonly IntegrationTestWebApplicationFactory _factory;
+
+    private List<TechTagModelResponse> _createdTechTagModels = new List<TechTagModelResponse>();
+
+    public TechTagModelPutEndpointsTests(IntegrationTestWebApplicationFactory factory)
+    {
+        _factory = factory;
+    }
+
+    public async Task DisposeAsync()
+    {
+        var httpClient = _factory.CreateClient();
+        foreach (int id in _createdTechTagModels.Select(x=>x.Id))
+        {
+            await httpClient.DeleteAsync($"{TechTagModelEndpoints.EndpointPrefix}/{id}");
+        }
+    }
+
+    public Task InitializeAsync() => Task.CompletedTask;
+
+    [Fact]
+    public async Task UpdateTechTagModel_UpdatesModel_WhenDataIsCorrect()
+    {
+        // ARRANGE
+        var httpClient = _factory.CreateClient();
+        
+        var propRecord = await ModelGenerator.PopulateDatabaseForTechTagModelTest(httpClient);
+        var modelRequest = ModelGenerator.GenerateNewCreateTechTagModelRequest(propRecord);
+
+        var create = await httpClient.PostAsJsonAsync(TechTagModelEndpoints.Post, modelRequest);
+        var get = await httpClient.GetAsync(create.Headers.Location.AbsolutePath);
+        var createdResponse = await get.Content.ReadFromJsonAsync<TechTagModelResponse>();
+        _createdTechTagModels.Add(createdResponse);
+
+        // ACT
+        UpdateTechTagModelRequest updateRequest = createdResponse.MapToUpdateRequest();
+        var result = await httpClient.PutAsJsonAsync($"{TechTagModelEndpoints.EndpointPrefix}/{createdResponse.Id}", updateRequest);
+        get = await httpClient.GetAsync(result.Headers.Location.AbsolutePath);
+        var updatedModel = await get.Content.ReadFromJsonAsync<TechTagModelResponse>();
+
+        // ASSERT
+        result.StatusCode.Should().Be(HttpStatusCode.Created);
+        result.Headers.Location.AbsolutePath.Should().Be($"/{TechTagModelEndpoints.EndpointPrefix}/{updatedModel.Id}");
+
+        updatedModel.Id.Should().Be(createdResponse.Id);
+        updatedModel.Name.Should().NotBe(createdResponse.Name);
+
+		updatedModel.Category.Should().BeEquivalentTo(createdResponse.Category);
+		updatedModel.URL.Should().Be(createdResponse.URL);
+		updatedModel.Description.Should().Be(createdResponse.Description);
+    }
+
+    //public async Task UpdateTechTagModel_DoesNotUpdateModel_WhenDataIsIncorrect()
+    //{
+    //    // ARRANGE
+    //    var httpClient = _factory.CreateClient();
+    //    //uhasdfgohjaoidfj
+    //    var modelRequest = ModelGenerator.GenerateNewCreateTechTagModelRequest();
+
+    //    var create = await httpClient.PostAsJsonAsync(TechTagModelEndpoints.Post, modelRequest);
+    //    var get = await httpClient.GetAsync(create.Headers.Location.AbsolutePath);
+    //    var createdResponse = await create.Content.ReadFromJsonAsync<TechTagModelResponse>();
+    //    _createdTechTagModels.Add(createdResponse);
+
+    //    // ACT
+    //    UpdateTechTagModelRequest updateRequest = ModelGenerator.GenerateNewUpdateTechTagModelRequest(createdResponse);
+    //    var result = await httpClient.GetAsync($"{TechTagModelEndpoints.EndpointPrefix}/{createdResponse.Id}");
+    //    var updatedModel = await result.Content.ReadFromJsonAsync<TechTagModelResponse>();
+
+    //    // ASSERT
+    //    result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    //    updatedModel.Should().BeEquivalentTo(castModel);
+    //    result.Headers.Location.Should().Be($"{TechTagModelEndpoints.EndpointPrefix}/{updatedModel.Id}");
+    //}
+
+    [Fact]
+    public async Task UpdateTechTagModel_ReturnsNotFound_WhenModelDoesNotExist()
+    {
+        // ARRANGE
+        var httpClient = _factory.CreateClient();
+        
+        var propRecord = await ModelGenerator.PopulateDatabaseForTechTagModelTest(httpClient);
+        var modelRequest = ModelGenerator.GenerateNewCreateTechTagModelRequest(propRecord);
+        var fakedModel = modelRequest.MapToModelFromCreateRequest(-10000,"IntegrationTesting");
+        var fakedResponse = fakedModel.MapToResponseFromModel();
+
+        // ACT
+        UpdateTechTagModelRequest updateRequest = fakedResponse.MapToUpdateRequest();
+        var result = await httpClient.PutAsJsonAsync($"{TechTagModelEndpoints.EndpointPrefix}/{updateRequest.Id}", updateRequest);
+
+        // ASSERT
+        result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+}

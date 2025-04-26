@@ -1,0 +1,80 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Gay.TCazier.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <VersionPrefix>1.0.0</VersionPrefix>
+<!--    <VersionSuffix>alpha-1.1.0</VersionSuffix>-->
+    <UserSecretsId>f0422392-2b8e-430f-a3e9-d18b867a2bae</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <OutputType>Exe</OutputType>
+    <PackageReleaseNotes>
+      VERSION 1.0.0
+      --------------------------------------------------------------------------------
+      Initial full release of API
+
+      VERSION 1.0.0-rc-1
+      --------------------------------------------------------------------------------
+      Skipped straight to release 1.0.0
+
+      VERSION 1.0.0-beta-1
+      --------------------------------------------------------------------------------
+      Skipped straight to release 1.0.0
+
+      VERSION 1.0.0-alpha.beta
+      --------------------------------------------------------------------------------
+      Skipped straight to release 1.0.0
+    </PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Gay.TCazier.pkg.Resume.BLL" Version="1.0.0" />
+    <PackageReference Include="Gay.TCazier.pkg.Resume.Contracts" Version="1.0.0" />
+    <PackageReference Include="Keycloak.AuthServices.Authentication" Version="2.6.1" />
+    <PackageReference Include="Keycloak.AuthServices.Authorization" Version="2.6.1" />
+    <PackageReference Include="LanguageExt.Core" Version="5.0.0-beta-22" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
+    <PackageReference Include="Gay.TCazier.pkg.Resume.BLL" Version="1.0.0-alpha-1.1.0" />
+    <PackageReference Include="Gay.TCazier.pkg.Resume.Contracts" Version="1.0.0-alpha-1.2.2" />
+    <PackageReference Include="Keycloak.AuthServices.Authentication" Version="2.6.1" />
+    <PackageReference Include="Keycloak.AuthServices.Authorization" Version="2.6.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\contracts\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\contracts\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Remove="log20250315.txt" />
+    <None Remove="log20250315_001.txt" />
+  </ItemGroup>
+  <PropertyGroup>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>
+    </LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <UseMauiEssentials>false</UseMauiEssentials>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+</Project>
