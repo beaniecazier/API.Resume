@@ -16,9 +16,9 @@ build-and-push:
   script:
     - echo "Bui;ing Docker Image..."
     - |
-      docker build -f ./API/Dockerfile \
-        --build-arg PULL_ACCESS_TOKEN=$NUGET_AUTH_TOKEN \
-        --build-arg PULL_ACCESS_USER=$NUGET_PULL_USER \
+      docker build -f ./API/Dockerfile
+        --build-arg PULL_ACCESS_TOKEN=$NUGET_AUTH_TOKEN
+        --build-arg PULL_ACCESS_USER=$NUGET_PULL_USER
         -t $IMAGE_NAME:temp
         .
     - |
