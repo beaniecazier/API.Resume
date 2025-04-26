@@ -1,5 +1,5 @@
 ﻿# Notes On Current State
-efcore does the initial get?? with the deleted/hidden filter so the GetAll tests seem to fail even when the filter 8s ignored and we allow these fuelds
+efcore does the initial get?? with the deleted/hidden filter so the GetAll tests seem to fail even when the filter is ignored and we allow these fields
 check if we really are allowing hidden and deleted
 how do we handle a common id when all models associated with it have been deleted? soft deleted?
 
@@ -12,32 +12,29 @@ create tool for auto gen templated files for each model type
 
 # TODO
 
-logging
-read me
-release notes
-git
+[-] logging - file name and getting the models to display neatly in multiple verbose levels
+[] read me
+[] release notes
+[] git branch structure
+[] pipeline tag the docker images
+[] cmd arg parsing
+[] swagger versioning stuff and args to set which version to run
+[] DI folder structure rearrange
+[] have a function for production and dev to build app accordingly
+[] check and finalize validation
+[] clean up and check testing 
+[] add testing stage to pipeline
+[] authorization/authentication - read in creds to assign sql model fields correctly
+[] add ownedby field to base model
+[] uuids
+[] clean warnings
+[] change endpoint prefix for degrees and institutions
+[] helm files
+[] get working with keycloak server and not just docker dev version
+[] token checking
 
-cmd arg parsing
+// custom json bindings?
 
-DI
-dbcontext factory?
-
-swagger versioning stuff
-
-custom json bindings?
-
-validation
-add testing
-check each of the main/common service functions for AddressModel
-
-
-authorization/authentication
-add ownedby field to base model
-
-bring in v1.0 of all my nuget dependencies
-finish adding the fluent stuff to each of the endpoints based on correct web codes
-clean warnings
-change endpoint prefix for degrees and institutions
 Release V1.0
 
 determine how to implement query stuff
